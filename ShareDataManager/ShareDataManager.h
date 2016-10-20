@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+// add tag 0.0.1
 @interface ShareDataManager : NSObject
 
 + (instancetype) sharedManager;
