@@ -8,13 +8,9 @@
 
 #import "ShareDataManager.h"
 
-#define GlipBundleIdentifier        @"com.glip.mobile"
-#define RCMobileBundleIdentifier    @"com.ringcentral.RingCentralMobile"
-
-#define AppGroupIdentifierStr       @"group.wecomic.sharedata"
-
-#define AppGroupDateFromGlipJSON      @"dataFromGlip.json"
-#define AppGroupDateFromRCJSON        @"dataFromRC.json"
+#define AppGroupIdentifierStr           @"group.wecomic.sharedata"
+#define AppGroupDateFromGlipJSON        @"dataFromGlip.json"
+#define AppGroupDateFromRCJSON          @"dataFromRC.json"
 
 @interface ShareDataManager ()
 {
