@@ -18,7 +18,6 @@
 
 @interface ShareDataManager ()
 {
-    NSDictionary    *_srcDict;
     NSDictionary    *_dataFromGlipDict;
     NSDictionary    *_dataFromRCDict;
     
@@ -44,21 +43,6 @@
 {
     if (self = [super init])
     {
-        _dataFromGlipDict = @{
-                              @"mailbox" : @{@"id" : @"123456789",
-                                             @"unreadBadge" : [NSNumber numberWithInt:32]},
-                              @"currentId" : @"987654321"
-                              };
-        _dataFromRCDict = @{
-                            @"mailbox" : @{@"id" : @"123456789",
-                                           @"unreadBadge" : [NSNumber numberWithInt:32],
-                                           @"authCode" : @"abc123!@#",
-                                           @"phoneNum" : @"13800001111",
-                                           @"email" : @"abc@ringcentral.com"
-                                           },
-                            @"currentId" : @"987654321"
-                            };
-        
         NSURL *containerURL = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:AppGroupIdentifierStr];
         _shareInfoFromGlipURL  = [containerURL URLByAppendingPathComponent:AppGroupDateFromGlipJSON];
         _shareInfoFromRCURL    = [containerURL URLByAppendingPathComponent:AppGroupDateFromRCJSON];
@@ -67,11 +51,8 @@
     return self;
 }
 
-- (NSDictionary *)readShareDataForBundleID:(NSString *)bundleIDStr;
+- (NSDictionary *)readShareDataWithURL:(NSURL *)dstURL;
 {
-    // TODO: need a accurate check!
-    NSURL *dstURL = [bundleIDStr isEqualToString:GlipBundleIdentifier] ? _shareInfoFromRCURL : _shareInfoFromGlipURL ;
-    
     NSDictionary *returnDict = nil;
     NSData *jsonData = [NSData dataWithContentsOfURL:dstURL];
     if (jsonData)
@@ -84,9 +65,8 @@
     return returnDict;
 }
 
-- (BOOL)saveShareDataForBundleID:(NSString *)bundleIDStr WithInfoDict:(NSDictionary *)infoDict;
+- (BOOL)saveShareDataToURL:(NSURL *)dstURL withInfoDict:(NSDictionary *)infoDict;
 {
-    NSURL *dstURL = [bundleIDStr isEqualToString:GlipBundleIdentifier] ? _shareInfoFromGlipURL : _shareInfoFromRCURL ;
     BOOL isSuccess = NO;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:infoDict
                                                        options:NSJSONWritingPrettyPrinted
@@ -98,6 +78,30 @@
     
     NSLog(@"%d", isSuccess);
     return isSuccess;
+}
+
+#pragma mark - public
+
+// For RC use
+- (BOOL)RCSaveShareDataToGlipWithInfoDict:(NSDictionary *)infoDict;
+{
+    return [self saveShareDataToURL:_shareInfoFromRCURL withInfoDict:infoDict];
+}
+
+- (NSDictionary *)RCReadShareDataFromGlip;
+{
+    return [self readShareDataWithURL:_shareInfoFromGlipURL];
+}
+
+// For Glip use
+- (BOOL)GlipSaveShareDataToRCWithInfoDict:(NSDictionary *)infoDict;
+{
+    return [self saveShareDataToURL:_shareInfoFromGlipURL withInfoDict:infoDict];
+}
+
+- (NSDictionary *)GlipReadShareDataFromRC;
+{
+    return [self readShareDataWithURL:_shareInfoFromRCURL];
 }
 
 @end

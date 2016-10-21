@@ -8,13 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
-// add tag 0.0.2
-// 小改动
 @interface ShareDataManager : NSObject
 
 + (instancetype) sharedManager;
 
-- (NSDictionary *)readShareDataForBundleID:(NSString *)bundleIDStr;
-- (BOOL)saveShareDataForBundleID:(NSString *)bundleIDStr WithInfoDict:(NSDictionary *)infoDict;
+// For RC use
+- (BOOL)RCSaveShareDataToGlipWithInfoDict:(NSDictionary *)infoDict;
+- (NSDictionary *)RCReadShareDataFromGlip;
+
+// For Glip use
+- (BOOL)GlipSaveShareDataToRCWithInfoDict:(NSDictionary *)infoDict;
+- (NSDictionary *)GlipReadShareDataFromRC;
 
 @end
