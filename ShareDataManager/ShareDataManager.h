@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-//v 0.0.4
+//v 0.0.4 add change
 @interface ShareDataManager : NSObject
 
 + (instancetype) sharedManager;
