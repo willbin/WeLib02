@@ -8,15 +8,15 @@
 
 #import "ShareDataManager.h"
 
-#define AppGroupIdentifierStr           @"group.wecomic.sharedata"
+#define AppGroupShareDataNormal         @"group.com.ringcentral.app"
+#define AppGroupShareDataInHouse        @"group.com.ringcentral.watchshared"
+
 #define AppGroupDateFromGlipJSON        @"dataFromGlip.json"
 #define AppGroupDateFromRCJSON          @"dataFromRC.json"
 
 @interface ShareDataManager ()
 {
-    NSDictionary    *_dataFromGlipDict;
-    NSDictionary    *_dataFromRCDict;
-    
+    BOOL            _isInHouse;
     NSURL           *_shareInfoFromGlipURL;
     NSURL           *_shareInfoFromRCURL;
 }
@@ -24,22 +24,30 @@
 
 @implementation ShareDataManager
 
-+ (instancetype) sharedManager;
++ (instancetype) sharedManagerForInHouse:(BOOL)isInHouse;
 {
     static dispatch_once_t once;
     static ShareDataManager *sharedManager = nil;
     dispatch_once (&once, ^()
                    {
-                       sharedManager = [[ShareDataManager alloc] init];
+                       sharedManager = [[ShareDataManager alloc] initForInHouse:isInHouse];
                    });
     return sharedManager;
 }
 
-- (instancetype) init;
+- (instancetype) initForInHouse:(BOOL)isInHouse;
 {
     if (self = [super init])
     {
-        NSURL *containerURL = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:AppGroupIdentifierStr];
+        NSURL *containerURL = nil;
+        if (_isInHouse)
+        {
+            containerURL = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:AppGroupShareDataInHouse];
+        }
+        else
+        {
+            containerURL = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:AppGroupShareDataNormal];
+        }
         _shareInfoFromGlipURL  = [containerURL URLByAppendingPathComponent:AppGroupDateFromGlipJSON];
         _shareInfoFromRCURL    = [containerURL URLByAppendingPathComponent:AppGroupDateFromRCJSON];
     }
@@ -71,14 +79,12 @@
     {
         isSuccess = [jsonData writeToURL:dstURL atomically:YES];
     }
-    
-    NSLog(@"%d", isSuccess);
     return isSuccess;
 }
 
 #pragma mark - public
 
-// For RC use
+// For RC
 - (BOOL)RCSaveShareDataToGlipWithInfoDict:(NSDictionary *)infoDict;
 {
     return [self saveShareDataToURL:_shareInfoFromRCURL withInfoDict:infoDict];
@@ -89,7 +95,7 @@
     return [self readShareDataWithURL:_shareInfoFromGlipURL];
 }
 
-// For Glip use
+// For Glip
 - (BOOL)GlipSaveShareDataToRCWithInfoDict:(NSDictionary *)infoDict;
 {
     return [self saveShareDataToURL:_shareInfoFromGlipURL withInfoDict:infoDict];

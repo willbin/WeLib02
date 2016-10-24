@@ -8,16 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
-//v 0.0.4 add change
+//v 0.0.6
 @interface ShareDataManager : NSObject
 
-+ (instancetype) sharedManager;
++ (instancetype) sharedManagerForInHouse:(BOOL)isInHouse;
 
-// For RC use
+// For RC
 - (BOOL)RCSaveShareDataToGlipWithInfoDict:(NSDictionary *)infoDict;
 - (NSDictionary *)RCReadShareDataFromGlip;
 
-// For Glip use
+// For Glip
 - (BOOL)GlipSaveShareDataToRCWithInfoDict:(NSDictionary *)infoDict;
 - (NSDictionary *)GlipReadShareDataFromRC;
 
