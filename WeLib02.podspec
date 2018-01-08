@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "WeLib02"
-  s.version      = "0.0.6"
+  s.version      = "0.0.7"
   s.summary      = "Test summary"
   s.description  = <<-DESC
                   这里测试信息, 应该要比summary长一些, 这样差不多了.
@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.author       = { "Will Wei" => "weiyoubin@gmail.com" }
   s.platform     = :ios, "8.0"
   s.source       = { :git => "https://github.com/willbin/WeLib02.git", :tag => "#{s.version}" }
-  s.source_files  = "ShareDataManager/*.{h,m}"
+  s.source_files  = "ShareDataManager/*.{h,m,zip}"
   s.requires_arc = true
 
 end
